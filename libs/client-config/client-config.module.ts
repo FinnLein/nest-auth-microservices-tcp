@@ -6,8 +6,8 @@ import { ClientConfigService } from './client-config.service'
   imports: [ConfigModule.forRoot({
     isGlobal: false,
     validationSchema: joi.object({
-      AUTH_CLIENT_PORT: joi.number().default(4001),
-      USERS_CLIENT_PORT: joi.number().default(4002),
+      AUTH_CLIENT_PORT: joi.number().default(6379),
+      USERS_CLIENT_PORT: joi.number().default(6379),
       ACCOUNT_CLIENT_PORT: joi.number().default(4011),
       MAIL_CLIENT_PORT: joi.number().default(4003)
     })

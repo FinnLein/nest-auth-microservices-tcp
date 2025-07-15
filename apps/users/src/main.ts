@@ -5,10 +5,11 @@ import { UserModule } from './user.module'
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(UserModule, {
-    transport: Transport.TCP,
+    transport: Transport.REDIS,
     options: {
-      host: 'localhost',
-      port: 4002
+      host: '127.0.0.1',
+      port: 6379,
+      password: process.env.REDIS_PASSWORD
     }
   })
 

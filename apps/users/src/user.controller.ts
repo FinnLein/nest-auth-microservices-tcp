@@ -11,7 +11,7 @@ export class UserController {
 
   @MessagePattern(USERS_PATTERNS.FIND_ALL)
   public findAll() {
-    return this.usersService.findAll()
+    return this.usersService.findAllCached()
   }
   @MessagePattern(USERS_PATTERNS.FIND_BY_ID)
   public findById(@Payload() id: string) {
@@ -33,8 +33,7 @@ export class UserController {
   @MessagePattern(USERS_PATTERNS.PASSWORD_UPDATE)
   public passwordUpdate(@Payload() payload: { id: string, dto: PasswordUpdateDto }) {
     const { id, dto } = payload
-    console.log(payload)
-    console.log(dto)
+
     return this.usersService.passwordUpdate(id, dto)
   }
   @MessagePattern(USERS_PATTERNS.DELETE)

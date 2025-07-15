@@ -2,15 +2,20 @@ import { PasswordUpdateDto } from '@app/contracts/users/password-update.dto'
 import { UserCreateDto } from '@app/contracts/users/user-create.dto'
 import { UserUpdateDto } from '@app/contracts/users/user-update.dto'
 import { UserDto } from '@app/contracts/users/user.dto'
-import { Injectable, } from '@nestjs/common'
+import { Inject, Injectable, } from '@nestjs/common'
 import { RpcException } from '@nestjs/microservices'
 import { PrismaService } from 'apps/auth-api-gateway/src/prisma/prisma.service'
 import { hash } from 'argon2'
+import Redis from 'ioredis'
+import { REDIS_CLIENT } from './redis/redis.constant'
 
 
 @Injectable()
 export class UserService {
-	public constructor(private readonly prisma: PrismaService) { }
+	public constructor(
+		@Inject(REDIS_CLIENT) private readonly redisClient: Redis,
+		private readonly prisma: PrismaService
+	) { }
 
 	public async findById(id: string): Promise<UserDto> {
 
@@ -94,6 +99,23 @@ export class UserService {
 		return {
 			totalCount,
 			users
+		}
+	}
+	public async findAllCached(): Promise<{ totalCount: number, users: UserDto[] }> {
+		const cacheKey = 'users:all'
+
+		const cached = await this.redisClient.get(cacheKey)
+		if (cached) {
+			return JSON.parse(cached)
+		}
+
+		const data = await this.findAll()
+
+		await this.redisClient.set(cacheKey, JSON.stringify(data), 'EX', 20)
+
+		return {
+			totalCount: data.totalCount,
+			users: data.users
 		}
 	}
 	public async delete(id: string) {

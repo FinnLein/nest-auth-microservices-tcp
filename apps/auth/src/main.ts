@@ -6,10 +6,11 @@ import { CustomRpcExceptionFilter } from './filters/rpc-exception.filter'
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule,
     {
-      transport: Transport.TCP,
+      transport: Transport.REDIS,
       options: {
         host: 'localhost',
-        port: 4001
+        port: 6379,
+        password: process.env.REDIS_PASSWORD
       }
     }
   )

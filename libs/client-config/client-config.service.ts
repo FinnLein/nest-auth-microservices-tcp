@@ -25,19 +25,22 @@ export class ClientConfigService {
 
 	get authClientOptions(): ClientOptions {
 		return {
-			transport: Transport.TCP,
+			transport: Transport.REDIS,
 			options: {
 				host: this.hostName,
-				port: this.getAuthClientPort()
+				port: this.getAuthClientPort(),
+				password: this.config.getOrThrow<string>('REDIS_PASSWORD')
+
 			}
 		}
 	}
 	get usersClientOptions(): ClientOptions {
 		return {
-			transport: Transport.TCP,
+			transport: Transport.REDIS,
 			options: {
 				host: this.hostName,
-				port: this.getUsersClientPort()
+				port: this.getUsersClientPort(),
+				password: this.config.getOrThrow<string>('REDIS_PASSWORD')
 			}
 		}
 	}
