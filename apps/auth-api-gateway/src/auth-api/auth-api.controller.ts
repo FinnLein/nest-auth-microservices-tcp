@@ -25,6 +25,7 @@ export class AuthApiController {
   public async login(@Body() dto: LoginApiDto, @Req() req: Request) {
     return this.authService.login(req, dto)
   }
+
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   public async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {

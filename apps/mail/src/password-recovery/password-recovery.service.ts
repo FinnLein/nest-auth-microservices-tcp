@@ -50,7 +50,7 @@ export class PasswordRecoveryService {
 
 		if (!existingUser) throw new RpcException({ statusCode: 404, message: 'User with this email not found' })
 
-		await lastValueFrom(this.usersClientProxy.send<UserDto>(USERS_PATTERNS.PASSWORD_UPDATE, {
+		await lastValueFrom(this.usersClientProxy.send<UserDto>(USERS_PATTERNS.PASSWORD_RECOVER, {
 			id: existingUser.id, dto: { password: await hash(dto.password) }
 		}))
 		await this.prisma.token.delete({

@@ -47,7 +47,6 @@ export class TwoFactorAuthService {
 		} catch (error) {
 			console.error("Fetch error", error)
 			throw error
-
 		}
 	}
 

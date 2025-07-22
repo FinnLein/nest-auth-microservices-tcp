@@ -35,6 +35,7 @@ export class AuthApiService {
 		}
 	}
 
+
 	public async logout(req: Request, res: Response): Promise<void> {
 		return new Promise((resolve, reject) => {
 			req.session.destroy(err => {

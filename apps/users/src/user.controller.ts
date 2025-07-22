@@ -1,4 +1,5 @@
-import { PasswordUpdateDto } from '@app/contracts/users/password-update.dto'
+import { ChangePasswordDto } from '@app/contracts/users/change-password.dto'
+import { RecoverPasswordDto } from '@app/contracts/users/password-recover.dto'
 import { UserCreateDto } from '@app/contracts/users/user-create.dto'
 import { UserUpdateDto } from '@app/contracts/users/user-update.dto'
 import { USERS_PATTERNS } from '@app/contracts/users/user.patterns'
@@ -30,11 +31,15 @@ export class UserController {
     const { id, dto } = payload
     return this.usersService.update(id, dto)
   }
-  @MessagePattern(USERS_PATTERNS.PASSWORD_UPDATE)
-  public passwordUpdate(@Payload() payload: { id: string, dto: PasswordUpdateDto }) {
+  @MessagePattern(USERS_PATTERNS.PASSWORD_RECOVER)
+  public recoverPassword(@Payload() payload: { id: string, dto: RecoverPasswordDto }) {
     const { id, dto } = payload
 
-    return this.usersService.passwordUpdate(id, dto)
+    return this.usersService.recoverPassword(id, dto)
+  }
+  @MessagePattern(USERS_PATTERNS.PASSWORD_CHANGE)
+  public changePassword(@Payload() payload: { id: string, dto: ChangePasswordDto }) {
+    return this.usersService.changePassword(payload.id, payload.dto)
   }
   @MessagePattern(USERS_PATTERNS.DELETE)
   public delete(@Payload() id: string) {

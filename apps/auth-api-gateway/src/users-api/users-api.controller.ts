@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
 import { UserRole } from '@prisma/client'
 import { Auth } from '../auth-api/decorators/auth.decorator'
 import { CurrentUser } from '../auth-api/decorators/currentUser.decorator'
+import { ChangePasswordApiDto } from './dto/change-password-api.dto'
 import { UserUpdateApiDto } from './dto/user-update-api.dto'
 import { UsersApiService } from './users-api.service'
 
@@ -17,7 +18,6 @@ export class UsersApiController {
 	@Get('profile')
 	@HttpCode(HttpStatus.OK)
 	public getProfile(@CurrentUser('id') id: string) {
-		console.log(id, 'api users controller')
 		return this.userService.findById(id)
 	}
 
@@ -26,6 +26,12 @@ export class UsersApiController {
 	@HttpCode(HttpStatus.OK)
 	public update(@CurrentUser('id') id: string, @Body() dto: UserUpdateApiDto) {
 		return this.userService.update(id, dto)
+	}
+	@Auth(UserRole.REGULAR)
+	@Post('change-password')
+	@HttpCode(HttpStatus.OK)
+	public changePassword(@CurrentUser('id') id: string, @Body() dto: ChangePasswordApiDto) {
+		return this.userService.changePassword(id, dto)
 	}
 
 	@Get('by-id/:id')

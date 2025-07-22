@@ -3,5 +3,5 @@ export const AUTH_PATTERNS = {
 	REGISTER: 'auth.register',
 	LOGOUT: 'auth.logout',
 	EXTRACT_PROFILE_BY_CODE: 'auth.extractProfileByCode',
-	EMAIL_CONFIRMATION: 'auth.emailConfirmation'
+	EMAIL_CONFIRMATION: 'auth.emailConfirmation',
 } 

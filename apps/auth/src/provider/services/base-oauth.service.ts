@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { RpcException } from '@nestjs/microservices'
+import { v4 as uuid } from 'uuid'
 import { TypeBaseProviderOptions } from './types/base-provider-options.types'
 import { TypeUserInfo } from './types/user-info.types'
+
 @Injectable()
 export class BaseOAuthService {
 	private BASE_URL: string
@@ -10,6 +12,7 @@ export class BaseOAuthService {
 
 	protected async extractUserInfo(data: any): Promise<TypeUserInfo> {
 		return {
+			id: uuid(),
 			...data,
 			provider: this.options.name
 		}
@@ -21,7 +24,7 @@ export class BaseOAuthService {
 			redirect_uri: this.getRedirectURL(),
 			scope: (this.options.scopes ?? []).join(' '),
 			access_type: 'offline',
-			prompt: 'select_account'
+			prompt: 'consent'
 		})
 
 		return `${this.options.authorize_url}?${query}`
@@ -75,7 +78,6 @@ export class BaseOAuthService {
 
 			const user = await userRequest.json()
 			const userData = await this.extractUserInfo(user)
-
 			return {
 				...userData,
 				access_token: tokenResponse.access_token,
@@ -85,7 +87,6 @@ export class BaseOAuthService {
 			}
 
 		} catch (error) {
-			console.error('Fetch error:', error)
 			throw error
 		}
 	}

@@ -5,6 +5,7 @@ import { EMAIL_PATTERNS } from '@app/contracts/email/email.patterns'
 import { UserCreateDto } from '@app/contracts/users/user-create.dto'
 import { UserDto } from '@app/contracts/users/user.dto'
 import { Inject, Injectable } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { ClientProxy, RpcException } from '@nestjs/microservices'
 import { AuthMethod } from '@prisma/client'
 import { hash, verify } from 'argon2'
@@ -17,9 +18,10 @@ import { ProviderService } from './provider/provider.service'
 export class AuthService {
   public constructor(
     private readonly providerService: ProviderService,
+    private readonly jwt: JwtService,
     @Inject(USERS_CLIENT) private readonly usersClientProxy: ClientProxy,
     @Inject(ACCOUNT_CLIENT) private readonly accountClientProxy: ClientProxy,
-    @Inject(MAIL_CLIENT) private readonly mailClientProxy: ClientProxy
+    @Inject(MAIL_CLIENT) private readonly mailClientProxy: ClientProxy,
   ) { }
   public async register(dto: RegisterDto) {
 

@@ -25,4 +25,5 @@ export class AuthController {
   public async extractProfileByCode(@Payload() payload: { provider: string, code: string }) {
     return this.authService.extractProfileByCode(payload.provider, payload.code)
   }
+
 }

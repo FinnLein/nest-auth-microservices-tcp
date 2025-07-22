@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { USERS_CLIENT } from 'libs/clients/constant'
 import { lastValueFrom } from 'rxjs'
+import { ChangePasswordApiDto } from './dto/change-password-api.dto'
 import { UserApiDto } from './dto/user-api.dto'
 import { UserCreateApiDto } from './dto/user-create-api.dto'
 import { UserUpdateApiDto } from './dto/user-update-api.dto'
@@ -27,6 +28,14 @@ export class UsersApiService {
 	}
 	update(id: string, dto: UserUpdateApiDto) {
 		return this.usersClient.send<UserApiDto, { id: string, dto: UserUpdateDto }>(USERS_PATTERNS.UPDATE, { id, dto })
+	}
+	public async changePassword(id: string, dto: ChangePasswordApiDto) {
+		try {
+			const response = await lastValueFrom(this.usersClient.send<{ message: string }, { id: string, dto: ChangePasswordApiDto }>(USERS_PATTERNS.PASSWORD_CHANGE, { id, dto }))
+			return response
+		} catch (err) {
+			throw err
+		}
 	}
 
 	delete(id: string) {
